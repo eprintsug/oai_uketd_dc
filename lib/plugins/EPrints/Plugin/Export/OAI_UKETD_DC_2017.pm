@@ -74,7 +74,7 @@ Maps 'short' values to proper ones e.g. 'phd' to 'Ph.D.', or 'dclinpsy' to 'D.Cl
 # map default thesis_type values to appropriate
 # qualificationname
 # can be overridden at archive level eg.
-# $c->{plugins}->{"Export::OAI_UKETD_DC"}->{params}->{thesis_type_to_qualname} = { .. };
+# $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{thesis_type_to_qualname} = { .. };
 $DEFAULT{thesis_type_to_qualname} = {
 	phd => "Ph.D.",
 	engd => "Eng.D.",
@@ -90,7 +90,7 @@ Maps thesis type to a level 'Masters' or 'Doctoral'.
 # map default thesis_type values to appropriate
 # qualificationlevel
 # can be overridden at archive level eg.
-# $c->{plugins}->{"Export::OAI_UKETD_DC"}->{params}->{thesis_type_to_quallevel} = { .. };
+# $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{thesis_type_to_quallevel} = { .. };
 $DEFAULT{thesis_type_to_quallevel} = {
 	phd => "doctoral",
 	engd => "doctoral",
@@ -106,7 +106,7 @@ thesis advisors.
 
 # default contributor_type that identifies a thesis advisor
 # can be overridden at archive level eg.
-# $c->{plugins}->{"Export::OAI_UKETD_DC"}->{params}->{contributor_type_thesis_advisor} = "advisor";
+# $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{contributor_type_thesis_advisor} = "advisor";
 $DEFAULT{contributor_type_thesis_advisor} = "http://www.loc.gov/loc.terms/relators/THS";
 
 =item creator_and_orcid (function)
@@ -122,8 +122,8 @@ Looks for orcids in contributor subfield 'orcid' by default.
 
 =item funder_and_project (function)
 
-If the RIOXX2 plugin is installed it will return the 'rioxx2_value_project' value.
-If this plugin is not present, it will look in the project and funder fields from the eprinnt.
+If the RIOXX2 plugin is installed it will return the 'rioxx2_project' value.
+If this plugin is not present, it will look in the project and funder fields from the eprint.
 
 =item doi (function)
 
