@@ -10,7 +10,7 @@ sub new
 
 	my $self = $class->SUPER::new( %params );
 
-	$self->{package_name} = 'uketd_dc';
+	$self->{package_name} = 'oai_uketd_dc_2017';
 	$self->{actions} = [qw( enable disable configure )];
 	$self->{disable} = 0; # always enabled, even in lib/plugins
 
