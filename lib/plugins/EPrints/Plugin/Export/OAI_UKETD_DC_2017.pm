@@ -44,7 +44,33 @@ use EPrints::Plugin::Export;
 use strict;
 use Time::Piece; #for last day of embargo month calculation
 
+=head2 Default options
+
+The following default values can be overridden in the archive configuration using plugin parameters e.g.:
+
+  $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{metadataPrefix} = "uketd_dc_2017";
+
+or
+
+  $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{advisor_and_orcid} = sub {
+    my( $plugin, $eprint ) = @_;
+    ...
+    return @stuff
+  };
+
+
+=cut
+
 my %DEFAULT;
+
+=over
+
+=item thesis_type_to_qualname
+
+Maps 'short' values to proper ones e.g. 'phd' to 'Ph.D', or 'dclinpsy' to 'D.Clin.Psy'.
+
+=cut
+
 
 # map default thesis_type values to appropriate
 # qualificationname
@@ -55,7 +81,14 @@ $DEFAULT{thesis_type_to_qualname} = {
 	engd => "engd",
 };
 
-# map default thesis_type valies to appropriate
+
+=item thesis_type_to_quallevel
+
+Maps thesis type to a level 'Masters' or 'Doctoral'.
+
+=cut
+
+# map default thesis_type values to appropriate
 # qualificationlevel
 # can be overridden at archive level eg.
 # $c->{plugins}->{"Export::OAI_UKETD_DC"}->{params}->{thesis_type_to_quallevel} = { .. };
@@ -64,18 +97,64 @@ $DEFAULT{thesis_type_to_quallevel} = {
 	engd => "doctoral",
 };
 
+
+=item contributor_type_thesis_advisor
+
+If the 'contributor' field is being used, which contributor_type should be used to match
+thesis advisors.
+
+=cut
+
 # default contributor_type that identifies a thesis advisor
 # can be overridden at archive level eg.
 # $c->{plugins}->{"Export::OAI_UKETD_DC"}->{params}->{contributor_type_thesis_advisor} = "advisor";
 $DEFAULT{contributor_type_thesis_advisor} = "http://www.loc.gov/loc.terms/relators/THS";
 
-# Default methods to get values that might be configured differently in individual repositories.
-# These can be overwritten in config e.g. if different fieldname is used.
-# The default
+=item creator_and_orcid (function)
+
+Looks for orcids in a subfield called 'orcid' by default.
+Returns arrays for author and orcid if present.
+
+=item advisor_and_orcid (function)
+
+Looks for advisors in 'advisor' and 'contributor' fields.
+Looks for orcids in contributor subfield 'orcid' by default.
+
+
+=item funder_and_project (function)
+
+If the RIOXX2 plugin is installed it will return the 'rioxx2_value_project' value.
+If this plugin is not present, it will look in the project and funder fields from the eprinnt.
+
+=item doi (function)
+
+References the doi or id_number field to find a DOI for this thesis.
+
+=item departments (function)
+
+Looks in the default 'divisions' field for department/faculty. Can be overwritten if data is stored in another
+field, or if some levels of faculty/department/school shouldn't be represented.
+
+=cut
+
 $DEFAULT{creator_and_orcid}  = \&creator_and_orcid;
 $DEFAULT{advisor_and_orcid}  = \&advisor_and_orcid;
 $DEFAULT{funder_and_project} = \&funder_and_project;
 $DEFAULT{doi} = \&doi;
+$DEFAULT{departments} = \&departments;
+
+=item add_attributes_to_advisor_authoridentifier
+
+May be used in the future to add an additional attribute to ORCID fields to distinguish between
+author and supervisor ORCIds.
+It is provided as a simple 0 or 1 option to change in the configuration.
+
+=item advisor_authoridentifier_attributes
+
+A hash of the additional attributes to add when the above value is enabled
+
+=cut
+
 # after discussions about linking authors/supervisors to their specific ORCIDs, this route was decided:
 # 1. Initially, do no use any non-defined (i.e. not defined in the UKETD_DC profile) attributes.
 # 2. Add code to the plugin so that use of the attribute could easily be enabled.
@@ -89,16 +168,41 @@ $DEFAULT{advisor_authoridentifier_attributes} = {
 	rel => "advisor",
 };
 
-# EThOS would like the language in ISO639-2 (3-character codes)
-# See: http://www.loc.gov/marc/languages/language_code.html
-# Provide a simple mapping of two-character (that EPrints uses by default) to three characters
+=item lang_2char_to_3char
+
+A map of two-character to three-character country codes. By default EPrints uses ISO639-1 (2-character) 
+code e.g. 'en', but the BL specification asks for ISO639-2 e.g. 'eng'.
+A value that is not mapped will be added verbatim to the output.
+Any values that could be used at the eprint or document level could be used e.g. to map 'English' to 'eng'.
+See: http://www.loc.gov/marc/languages/language_code.html
+
+=cut
+
+
 $DEFAULT{lang_2char_to_3char} = {
 	en => "eng",
 	fr => "fre",	
 };
 
+
+=item metadataPrefix
+
+This plugin is designed to replace (using a plugin alias) the existing export plugin.
+By setting this value to something other that 'uketd_dc', and not aliasing the plugin, you can expose the
+data in the new format in the OAI-PMH interface. This can be useful for testing. If the value is set in a
+config file using:
+  $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{metadataPrefix} = "uketd_dc_2017";
+then a URL of
+  http://SERVER_NAME/cgi/oai2?verb=GetRecords&metadataPrefix=uketd_dc_2017 
+will use this export format.
+
+=cut
+
 $DEFAULT{metadataPrefix} = 'uketd_dc';
 
+=back
+
+=cut
 
 sub new
 {
@@ -124,6 +228,7 @@ sub new
 		creator_and_orcid
 		advisor_and_orcid
 		funder_and_project
+		departments
 		doi
 		lang_2char_to_3char
 		add_attributes_to_advisor_authoridentifier
@@ -171,12 +276,12 @@ sub xml_dataobj
 	# we have a variety of namespaces since we're doing qualified dublin core, so we need an
 	# array of references to three element arrays in our data structure
 	my @etdData = $plugin->eprint_to_uketd_dc( $eprint );
-	
+
 	my $namespace = $plugin->{xmlns};
 	my $schema = $plugin->{schemaLocation};
 
-        # the eprint may well be null since it may not be a thesis but an article
-        my $uketd_dc = $plugin->{session}->make_element(
+	# the eprint may well be null since it may not be a thesis but an article
+	my $uketd_dc = $plugin->{session}->make_element(
 		"uketd_dc:uketddc",
 		"xmlns:dc" => "http://purl.org/dc/elements/1.1/",
 		"xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance",
@@ -189,7 +294,7 @@ sub xml_dataobj
 	);
 	# turn the list of pairs into XML blocks (indented by 8) and add them
 	# them to the ETD element.
-	# 
+ 
 	foreach( @etdData )
 	{
 		if(scalar @$_ < 4){
@@ -205,7 +310,7 @@ sub xml_dataobj
 		}
 	}
 	return $uketd_dc;
-	
+
 }
 
 ##############################################################################
@@ -241,29 +346,12 @@ sub eprint_to_uketd_dc
 			push @etddata, [ "date", $eprint->get_value( "date" ), "dc" ];
 		}
 
-		# grab the creators without the ID parts so if the site admin
-		# sets or unsets creators to having and ID part it will make
-		# no difference to this bit.
-
-		foreach(qw( creator_and_orcid advisor_and_orcid funder_and_project doi ))
+		#get data from referenced field functions
+		foreach(qw( creator_and_orcid advisor_and_orcid funder_and_project departments doi ))
 		{
 			push @etddata, &{$plugin->{$_}}( $plugin, $eprint );
 		}
 
-#		push @etddata, &{$plugin->{creator_and_orcid}}( $plugin, $eprint );
-#		push @etddata, &{$plugin->{advisor_and_orcid}}( $plugin, $eprint );
-#		push @etddata, &{$plugin->{funder_and_project}}( $plugin, $eprint );
-#		my $doi = &{$plugin->{doi}}( $plugin, $eprint );
-#		push @etddata, $doi if defined $doi;
-	
-#		my $creators = $eprint->get_value( "creators_name" );
-#		if( defined $creators )
-#		{
-#			foreach my $creator ( @{$creators} )
-#			{
-#				push @etddata, [ "creator", EPrints::Utils::make_name_string( $creator ), "dc" ];
-#			}
-#		}
 		if( $eprint->exists_and_set("subjects")) ##Check for existence before accessing. jy2e08
 		{
 			my $subjectid;
@@ -302,28 +390,24 @@ sub eprint_to_uketd_dc
 			push @etddata, [ "issued", $issued, "dcterms" ];
 		}
 	
-	
+
 		my $ds = $eprint->get_dataset();
 		push @etddata, [ "type", $session->get_type_name( "eprint", $eprint->get_value( "type" ) ), "dc" ];
-		
+
 		# The URL of the abstract page is the dcterms isreferencedby
 		push @etddata, [ "isReferencedBy", $eprint->get_url(), "dcterms" ];
-	
-	
+
+
 		my @documents = $eprint->get_all_documents();
 		my $mimetypes = $session->config( "oai", "mime_types" );
 		foreach( @documents )
 		{
-                        #JLRS 2014-03-17 Don't make reference to hidden files
-                        next if $_->get_value( "security" ) eq "hidden";
-                        #/JLRS
-
 			my $format = $mimetypes->{$_->get_value("format")};
 			$format = $_->get_value("format") unless defined $format;
 			#$format = "application/octet-stream" unless defined $format;
-			
+
 			push @etddata, [ "identifier", $_->get_url(), "dc", "dcterms:URI" ];
-			push @etddata, [ "format", $format, "dc" ];
+			push @etddata, [ "format", $format, "dc" ] if defined $format;
 			# information about extent and checksums could be added here, if they are available
 			# the default eprint doesn't have a place for this but both could be generated dynamically
 
@@ -331,7 +415,6 @@ sub eprint_to_uketd_dc
 			# this may be in addition to fields defined at the eprint level (see below)
 			if( $_->exists_and_set( "language" ) )
 			{
-#				push @etddata, [ "language", $_->get_value( "language" ), "dc"];
 				my $lang = $_->get_value( "language" );
 				if( defined $plugin->{lang_2char_to_3char}{ $lang } ){
 					push @etddata, [ "language", $plugin->{lang_2char_to_3char}{ $lang }, "dc", { "xsi:type" => "dcterms:ISO639-2" } ];
@@ -397,19 +480,7 @@ sub eprint_to_uketd_dc
 		if( $eprint->exists_and_set( "department" )){
 			push @etddata, [ "department", $eprint->get_value( "department" ), "uketdterms"];
 		}
-		if( $eprint->exists_and_set( "advisor" )){
-			push @etddata, [ "advisor", $eprint->get_value( "advisor" ), "uketdterms"];
-		}
-		# also look in contributors
-		elsif( $eprint->exists_and_set( "contributors" ) )
-		{
-			foreach my $contrib ( @{ $eprint->get_value( "contributors" ) } )
-			{
-				next unless defined $contrib->{type} && defined $contrib->{name};
-				next unless $contrib->{type} eq $plugin->{contributor_type_thesis_advisor};
-				push @etddata, [ "advisor", EPrints::Utils::make_name_string( $contrib->{name} ), "uketdterms" ];
-			}
-		}
+
 		if( $eprint->exists_and_set( "language" )){
 			my $lang = $eprint->get_value( "language" );
 			if( defined $plugin->{lang_2char_to_3char}{ $lang } ){
@@ -418,17 +489,7 @@ sub eprint_to_uketd_dc
 				push @etddata, [ "language", $lang, "dc"];
 			}
 		}
-		if( $eprint->exists_and_set( "sponsors" )){
-			push @etddata, [ "sponsor", $eprint->get_value( "sponsors" ), "uketdterms"];
-		}
-		# also look in funders
-		elsif( $eprint->exists_and_set( "funders" ) )
-		{
-			foreach my $funder ( @{ $eprint->get_value( "funders" ) } )
-			{
-				push @etddata, [ "sponsor", $funder, "uketdterms"];
-			}
-		}
+
 		if( $eprint->exists_and_set( "alt_title" )){
 			push @etddata, [ "alternative", $eprint->get_value("alt_title" ), "dcterms"];
 		}
@@ -456,18 +517,44 @@ sub eprint_to_uketd_dc
 	return @etddata;
 }
 
+sub departments
+{
+	my( $plugin, $eprint ) = @_;
+
+	my @depts;
+
+	if( $eprint->exists_and_set( "divisions" ) ){
+		foreach my $div_id ( @{$eprint->get_value( "divisions" )} )
+                {
+			my $dept = EPrints::DataObj::Subject->new( $plugin->{session}, $div_id );
+                        # avoid problems with bad subjects
+                        next unless( defined $dept );
+                        push @depts, [ "department", EPrints::Utils::tree_to_utf8( $dept->render_description() ), "uketdterms" ];
+                }
+	}
+
+	return @depts;
+}
+
 sub doi
 {
-        my( $plugin, $eprint ) = @_;
+	my( $plugin, $eprint ) = @_;
 
-        if( $eprint->exists_and_set( "doi" ) )
-        {
-                my $doi = $plugin->format_doi( $eprint->get_value( "doi" ) );
-                if( defined $doi ){
-                        return [ "identifier", $doi, "dc", "dcterms:DOI" ];
-                }
-        }
-	
+	if( $eprint->exists_and_set( "doi" ) )
+	{
+		my $doi = $plugin->format_doi( $eprint->get_value( "doi" ) );
+		if( defined $doi ){
+			return [ "identifier", $doi, "dc", "dcterms:DOI" ];
+		}
+	}
+
+	if( $eprint->exists_and_set( "id_number" ) ){
+		my $doi = $plugin->format_doi( $eprint->get_value( "id_number" ) );
+		if( defined $doi ){
+			return [ "identifier", $doi, "dc", "dcterms:DOI" ];
+		}
+	}
+
 	return;
 }
 
@@ -573,6 +660,12 @@ sub funder_and_project
 			}	
 		}
 	}
+
+	# 'sponsors' is a non-standard field, but was mapped in the plugin, so is retained here
+	if( $eprint->exists_and_set( "sponsors" )){
+		push @sponsors, [ "sponsor", $eprint->get_value( "sponsors" ), "uketdterms"];
+	}
+
 	return @sponsors, @grants;
 };
 
@@ -600,11 +693,10 @@ sub format_doi
 	!ix )
 	{
 		# just use the last part - the actual DOI.
-		$doi = $1;
+		return $1;
 	}
 
-	return $doi;
-
+	return undef;
 }
 
 	
