@@ -67,7 +67,7 @@ my %DEFAULT;
 
 =item thesis_type_to_qualname
 
-Maps 'short' values to proper ones e.g. 'phd' to 'Ph.D', or 'dclinpsy' to 'D.Clin.Psy'.
+Maps 'short' values to proper ones e.g. 'phd' to 'Ph.D.', or 'dclinpsy' to 'D.Clin.Psy.'.
 
 =cut
 
@@ -77,8 +77,8 @@ Maps 'short' values to proper ones e.g. 'phd' to 'Ph.D', or 'dclinpsy' to 'D.Cli
 # can be overridden at archive level eg.
 # $c->{plugins}->{"Export::OAI_UKETD_DC"}->{params}->{thesis_type_to_qualname} = { .. };
 $DEFAULT{thesis_type_to_qualname} = {
-	phd => "phd",
-	engd => "engd",
+	phd => "Ph.D.",
+	engd => "Eng.D.",
 };
 
 
@@ -168,9 +168,9 @@ $DEFAULT{advisor_authoridentifier_attributes} = {
 	rel => "advisor",
 };
 
-=item lang_2char_to_3char
+=item lang_to_3char
 
-A map of two-character to three-character country codes. By default EPrints uses ISO639-1 (2-character) 
+A map of language values (normally two-characters) to three-character country codes. By default EPrints uses ISO639-1 (2-character) 
 code e.g. 'en', but the BL specification asks for ISO639-2 e.g. 'eng'.
 A value that is not mapped will be added verbatim to the output.
 Any values that could be used at the eprint or document level could be used e.g. to map 'English' to 'eng'.
@@ -179,7 +179,7 @@ See: http://www.loc.gov/marc/languages/language_code.html
 =cut
 
 
-$DEFAULT{lang_2char_to_3char} = {
+$DEFAULT{lang_to_3char} = {
 	en => "eng",
 	fr => "fre",	
 };
@@ -203,6 +203,7 @@ $DEFAULT{metadataPrefix} = 'uketd_dc';
 =back
 
 =cut
+
 
 sub new
 {
@@ -230,7 +231,7 @@ sub new
 		funder_and_project
 		departments
 		doi
-		lang_2char_to_3char
+		lang_to_3char
 		add_attributes_to_advisor_authoridentifier
 		advisor_authoridentifier_attributes
 		metadataPrefix
@@ -367,7 +368,7 @@ sub eprint_to_uketd_dc
 		push @etddata, [ "abstract", $eprint->get_value( "abstract" ), "dcterms" ]; 
 		
 		# Steve Carr : theses aren't technically 'published' so we can't assume a publisher here as in original code
-		if(defined $eprint->get_value( "publisher" )){
+		if( $eprint->exists_and_set( "publisher" ) ){
 			push @etddata, [ "commercial", $eprint->get_value( "publisher" ), "uketdterms" ]; 
 		}
 	
@@ -391,7 +392,6 @@ sub eprint_to_uketd_dc
 		}
 	
 
-		my $ds = $eprint->get_dataset();
 		push @etddata, [ "type", $session->get_type_name( "eprint", $eprint->get_value( "type" ) ), "dc" ];
 
 		# The URL of the abstract page is the dcterms isreferencedby
@@ -416,8 +416,8 @@ sub eprint_to_uketd_dc
 			if( $_->exists_and_set( "language" ) )
 			{
 				my $lang = $_->get_value( "language" );
-				if( defined $plugin->{lang_2char_to_3char}{ $lang } ){
-					push @etddata, [ "language", $plugin->{lang_2char_to_3char}{ $lang }, "dc", { "xsi:type" => "dcterms:ISO639-2" } ];
+				if( defined $plugin->{lang_to_3char}{ $lang } ){
+					push @etddata, [ "language", $plugin->{lang_to_3char}{ $lang }, "dc", { "xsi:type" => "dcterms:ISO639-2" } ];
 				} else {
 					push @etddata, [ "language", $lang, "dc"];
 				}
@@ -477,14 +477,11 @@ sub eprint_to_uketd_dc
 		if( $eprint->exists_and_set( "institution" )){
 			push @etddata, [ "institution", $eprint->get_value( "institution" ), "uketdterms"];
 		}
-		if( $eprint->exists_and_set( "department" )){
-			push @etddata, [ "department", $eprint->get_value( "department" ), "uketdterms"];
-		}
 
 		if( $eprint->exists_and_set( "language" )){
 			my $lang = $eprint->get_value( "language" );
-			if( defined $plugin->{lang_2char_to_3char}{ $lang } ){
-				push @etddata, [ "language", $plugin->{lang_2char_to_3char}{ $lang }, "dc", { "xsi:type" => "dcterms:ISO639-2" } ];
+			if( defined $plugin->{lang_to_3char}{ $lang } ){
+				push @etddata, [ "language", $plugin->{lang_to_3char}{ $lang }, "dc", { "xsi:type" => "dcterms:ISO639-2" } ];
 			} else {
 				push @etddata, [ "language", $lang, "dc"];
 			}
@@ -523,7 +520,8 @@ sub departments
 
 	my @depts;
 
-	if( $eprint->exists_and_set( "divisions" ) ){
+	if( $eprint->exists_and_set( "divisions" ) )
+	{
 		foreach my $div_id ( @{$eprint->get_value( "divisions" )} )
                 {
 			my $dept = EPrints::DataObj::Subject->new( $plugin->{session}, $div_id );
@@ -531,6 +529,11 @@ sub departments
                         next unless( defined $dept );
                         push @depts, [ "department", EPrints::Utils::tree_to_utf8( $dept->render_description() ), "uketdterms" ];
                 }
+	}
+
+	if( $eprint->exists_and_set( "department" ))
+	{
+		push @depts, [ "department", $eprint->get_value( "department" ), "uketdterms"];
 	}
 
 	return @depts;
@@ -543,14 +546,16 @@ sub doi
 	if( $eprint->exists_and_set( "doi" ) )
 	{
 		my $doi = $plugin->format_doi( $eprint->get_value( "doi" ) );
-		if( defined $doi ){
+		if( defined $doi )
+		{
 			return [ "identifier", $doi, "dc", "dcterms:DOI" ];
 		}
 	}
 
 	if( $eprint->exists_and_set( "id_number" ) ){
 		my $doi = $plugin->format_doi( $eprint->get_value( "id_number" ) );
-		if( defined $doi ){
+		if( defined $doi )
+		{
 			return [ "identifier", $doi, "dc", "dcterms:DOI" ];
 		}
 	}
@@ -572,7 +577,8 @@ sub creator_and_orcid
 		foreach my $creator ( @{$creators} )
 		{
 			push @dc_creators, [ "creator", EPrints::Utils::make_name_string( $creator->{name} ), "dc" ];
-			if( defined $creator->{orcid} ){
+			if( EPrints::Utils::is_set( $creator->{orcid} ) ) 
+			{
 				push @orcids, [ "authoridentifier", $plugin->format_orcid( $creator->{orcid} ), "uketdterms", { "xsi:type" => "uketdterms:ORCID" }  ];
 			}
 		}
@@ -588,7 +594,8 @@ sub advisor_and_orcid
 	my @advisors = ();	
 	my @orcids = ();	
 
-	if( $eprint->exists_and_set( "advisor" )){
+	if( $eprint->exists_and_set( "advisor" ) )
+	{
 		push @advisors, [ "advisor", $eprint->get_value( "advisor" ), "uketdterms"];
 	}
 	# also look in contributors
@@ -599,7 +606,8 @@ sub advisor_and_orcid
 			next unless defined $contrib->{type} && defined $contrib->{name};
 			next unless $contrib->{type} eq $plugin->{contributor_type_thesis_advisor};
 			push @advisors, [ "advisor", EPrints::Utils::make_name_string( $contrib->{name} ), "uketdterms" ];
-			if( defined $contrib->{orcid} ){
+			if( EPrints::Utils::is_set( $contrib->{orcid} ) )
+			{
 				push @orcids, [ "authoridentifier", $plugin->format_orcid( $contrib->{orcid} ), "uketdterms", $plugin->_attributes_for_advisor_authoridentifier  ];
 			}
 		}
@@ -667,7 +675,7 @@ sub funder_and_project
 	}
 
 	return @sponsors, @grants;
-};
+}
 
 sub format_orcid
 {
