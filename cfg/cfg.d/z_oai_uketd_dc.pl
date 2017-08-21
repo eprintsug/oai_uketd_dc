@@ -67,8 +67,20 @@ $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{metadataPrefix} = "uket
 #};
 
 
+###################################################################################
 # 
-#contributor_type_thesis_advisor
+# contributor_type_thesis_advisor
+# The contributor type to include as a supervisor 
+#
+###################################################################################
+
+# $c->{plugins}->{"OAI_UKETD_DC"}->{params}->{contributor_type_thesis_advisor} = "http://www.loc.gov/loc.terms/relators/THS";
+
+
+
+
+###################################################################################
+
 
 ###################################################################################
 ###
@@ -85,6 +97,15 @@ $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{metadataPrefix} = "uket
 ### your repository may need.
 ### It may be useful to refer to the default methods in 
 ### EPrints::Plugin::Export::OAI_UKETD_DC_2017 
+###
+### There are two 'internal' methods that format DOIs, ORCIDs in the way EThOS
+### would like to receive them:
+### my $orcid = _format_orcid( $creator->{orcid} );
+### my $doi = _format_doi( $eprint->value( "doi" ) );
+### If the value passed to the _format_orcid method doesn't look like an orcid, it 
+### is returned as-is whereas if the value passed to _format_doi doesn't match the 
+### expected format, nothing is returned.
+###
 ###################################################################################
 
 #$c->{plugins}->{"OAI_UKETD_DC"}->{params}->{creator_and_orcid} = sub {
@@ -93,7 +114,7 @@ $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{metadataPrefix} = "uket
 #	my @returns = ();
 #	# do something to get values
 #	# push @returns, [ "elementName", "value", "namespace", { "attr1" => "value1", "attr2" => "value2", } ];
-#	return @returnes;
+#	return @returns;
 #};
 
 
