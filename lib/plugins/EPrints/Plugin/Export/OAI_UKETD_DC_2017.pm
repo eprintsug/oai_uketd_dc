@@ -42,7 +42,6 @@ use EPrints::Plugin::Export;
 @ISA = ( "EPrints::Plugin::Export" );
 
 use strict;
-use Time::Piece; #for last day of embargo month calculation
 
 =head2 Default options
 
@@ -424,21 +423,7 @@ sub eprint_to_uketd_dc
 			}
 			if( $_->exists_and_set( "date_embargo" ) )
 			{
-				# EPrints embargo date may be just be a year or year/month.
-				# Need to normalise and format as per guidelines
-				my $embargo = $_->get_value( "date_embargo" );
-				if( length $embargo == 4 )
-				{
-					# only year defined. Embargo is released after the end of the year.
-					$embargo = $embargo .= "-12-31";
-				}
-				elsif( length $embargo == 7 )
-				{
-					my $tp = Time::Piece->strptime( $embargo, "%Y-%m" );
-					$embargo = "$embargo-".$tp->month_last_day;
-				}
-
-				push @etddata, ["embargodate", $embargo, "uketdterms"];
+				push @etddata, ["embargodate", $plugin->_last_day_of_embargo( $_->get_value( "date_embargo" ) ), "uketdterms"];
 			}
 			if( $_->exists_and_set( "security" ) )
 			{
@@ -707,6 +692,45 @@ sub format_doi
 	return undef;
 }
 
+sub _last_day_of_embargo
+{
+	my( $embargo ) = @_;
+
+	if( length $embargo == 4 )
+	{
+		# only year defined. Embargo is released after the end of the year.
+		return $embargo .= "-12-31";
+	}
+	if( length $embargo == 10 )
+	{
+		# Full date specified - return it.
+		return $embargo;
+	}
+
+	if( length $embargo == 7 )
+	{
+		# year and month specified.	
+		my( $y, $m ) = split( /\-/, $embargo );
+
+		my $end_day = (31,28,31,30,31,30,31,31,30,31,30,31)[$m-1]; #month is 1-based; perl array is 0-based
+
+		#if month is not Feb, end day does not change
+		return "$embargo-$end_day" if $m != 2;
+	
+		# else work out leap year stuff
+		# year is div by 4, but not 100, but is by 400
+		# unlikely for ETheses embargo expiry - but I've heard talk of '100 year embargos'...
+		if ( ($y % 4 == 0) && ($y % 100 != 0) && ($y % 400 == 0) ) 
+		{
+			$end_day++;
+		}
+
+		return "$embargo-$end_day";
+	}
+
+	# if none of the cases above match, the've got something strange. Just return as-is
+	return $embargo;
+}
 	
 1;
 
