@@ -423,7 +423,7 @@ sub eprint_to_uketd_dc
 			}
 			if( $_->exists_and_set( "date_embargo" ) )
 			{
-				push @etddata, ["embargodate", $plugin->_last_day_of_embargo( $_->get_value( "date_embargo" ) ), "uketdterms"];
+				push @etddata, ["embargodate", _last_day_of_embargo( $_->get_value( "date_embargo" ) ), "uketdterms"];
 			}
 			if( $_->exists_and_set( "security" ) )
 			{
@@ -530,7 +530,7 @@ sub doi
 
 	if( $eprint->exists_and_set( "doi" ) )
 	{
-		my $doi = $plugin->format_doi( $eprint->get_value( "doi" ) );
+		my $doi = _format_doi( $eprint->get_value( "doi" ) );
 		if( defined $doi )
 		{
 			return [ "identifier", $doi, "dc", "dcterms:DOI" ];
@@ -538,7 +538,7 @@ sub doi
 	}
 
 	if( $eprint->exists_and_set( "id_number" ) ){
-		my $doi = $plugin->format_doi( $eprint->get_value( "id_number" ) );
+		my $doi = _format_doi( $eprint->get_value( "id_number" ) );
 		if( defined $doi )
 		{
 			return [ "identifier", $doi, "dc", "dcterms:DOI" ];
@@ -564,7 +564,7 @@ sub creator_and_orcid
 			push @dc_creators, [ "creator", EPrints::Utils::make_name_string( $creator->{name} ), "dc" ];
 			if( EPrints::Utils::is_set( $creator->{orcid} ) ) 
 			{
-				push @orcids, [ "authoridentifier", $plugin->format_orcid( $creator->{orcid} ), "uketdterms", { "xsi:type" => "uketdterms:ORCID" }  ];
+				push @orcids, [ "authoridentifier", _format_orcid( $creator->{orcid} ), "uketdterms", { "xsi:type" => "uketdterms:ORCID" }  ];
 			}
 		}
 	}
@@ -593,7 +593,7 @@ sub advisor_and_orcid
 			push @advisors, [ "advisor", EPrints::Utils::make_name_string( $contrib->{name} ), "uketdterms" ];
 			if( EPrints::Utils::is_set( $contrib->{orcid} ) )
 			{
-				push @orcids, [ "authoridentifier", $plugin->format_orcid( $contrib->{orcid} ), "uketdterms", $plugin->_attributes_for_advisor_authoridentifier  ];
+				push @orcids, [ "authoridentifier", _format_orcid( $contrib->{orcid} ), "uketdterms", $plugin->_attributes_for_advisor_authoridentifier  ];
 			}
 		}
 	}
@@ -662,9 +662,9 @@ sub funder_and_project
 	return @sponsors, @grants;
 }
 
-sub format_orcid
+sub _format_orcid
 {
-	my( $plugin, $orcid ) = @_;
+	my( $orcid ) = @_;
 
 	# guidelines want 16-characters, no hyphens or URLs.
 	# This should deal with URLs or namespaced values.
@@ -673,9 +673,9 @@ sub format_orcid
 	return $orcid;
 }
 
-sub format_doi
+sub _format_doi
 {
-	my( $plugin, $doi ) = @_;
+	my( $doi ) = @_;
 
 	# advice received is that just DOI is preferred to a URL
 	# logic taken from EPrints::Extras::render_possible_doi
