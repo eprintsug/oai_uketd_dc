@@ -70,4 +70,5 @@
   <description>Updates the OAI-PMH metadata format &apos;UKETD_DC&apos; that the British Library EThOS service uses to harvest thesis information.</description>
   <requirements>No additional modules.</requirements>
   <home_page>http://github.com/eprintsug/oai_uketd_dc</home_page>
+  <icon>images/epm/icon_oai_uketd_dc.png</icon>
 </epm>
