@@ -26,11 +26,32 @@
           <hash_type>MD5</hash_type>
           <filesize>1037</filesize>
         </file>
+        <file>
+          <filename>static/images/epm/icon_oai_uketd_dc.png</filename>
+          <mime_type>image/png</mime_type>
+          <hash>4af91cf72ec7dd1ef8beb0d57a87f06e</hash>
+          <hash_type>MD5</hash_type>
+          <filesize>71703</filesize>
+        </file>
       </files>
       <mime_type>inode/symlink</mime_type>
       <format>other</format>
       <main>plugins/EPrints/Plugin/Screen/EPMC/OAI_UKETD_DC_2017.pm</main>
       <content>install</content>
+    </document>
+    <document>
+      <files>
+        <file>
+          <filename>static/images/epm/icon_oai_uketd_dc.png</filename>
+          <mime_type>image/png</mime_type>
+          <hash>4af91cf72ec7dd1ef8beb0d57a87f06e</hash>
+          <hash_type>MD5</hash_type>
+          <filesize>71703</filesize>
+        </file>
+      </files>
+      <format>image</format>
+      <main>static/images/epm/icon_oai_uketd_dc.png</main>
+      <content>coverimage</content>
     </document>
   </documents>
   <version>0.0.2</version>
