@@ -1,8 +1,13 @@
 # Config file (editable by EPMC screen)
 
+# Firstly, enable this plugin.
+$c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{disable} = 0;
 
 # Map this plugin over the one supplied with EPrints
-# Unsetting the metadataPrefix stops this appearing in the OAI-PMH interface
+# Unsetting the metadataPrefix stops the default one appearing in the OAI-PMH interface
+# NB if two plugins can supply the same metadataPrefix for the OAI-PMH interface, which
+# one is actually used isn't defined - there is not ordering, or preference for them.
+# For this reason, we have to set the default metadataPrefix to undef.
 $c->{plugins}->{"Export::OAI_UKETD_DC"}->{params}->{metadataPrefix} = undef;
 # and setting the new Export plugin's prefix makes it appear.
 $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{metadataPrefix} = "uketd_dc";
