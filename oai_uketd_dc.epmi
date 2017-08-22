@@ -8,7 +8,7 @@
         <file>
           <filename>epm/oai_uketd_dc/cfg/cfg.d/z_oai_uketd_dc.pl</filename>
           <mime_type>text/plain</mime_type>
-          <hash>340e3d54404620287ab1d849e11d1dd6</hash>
+          <hash>52a5b79d08d6fb269ebe7092b2785805</hash>
           <hash_type>MD5</hash_type>
           <filesize>5294</filesize>
         </file>
@@ -34,7 +34,7 @@
           <filesize>71703</filesize>
         </file>
       </files>
-      <mime_type>inode/symlink</mime_type>
+      <mime_type>text/plain</mime_type>
       <format>other</format>
       <main>plugins/EPrints/Plugin/Screen/EPMC/OAI_UKETD_DC_2017.pm</main>
       <content>install</content>
