@@ -16,6 +16,8 @@ $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{metadataPrefix} = "uket
 # Leave these lines commented out unless you're sure you know what you're doing!
 ### $c->{plugin_alias_map}->{"Export::OAI_UKETD_DC"} = "Export::OAI_UKETD_DC_2017";
 ### $c->{plugin_alias_map}->{"Export::OAI_UKETD_DC_2017"} = undef;
+# If for some reason you choose to do this, the examples for overriding default
+# field mappings below should all reference Export::OAI_UKETD_DC, instead of the _2017 version.
 
 
 # This new version of the UKETD_DC profile has some configuration options to make it easier for you to 
@@ -33,7 +35,7 @@ $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{metadataPrefix} = "uket
 #
 ###################################################################################
 
-#$c->{plugins}->{"OAI_UKETD_DC"}->{params}->{thesis_type_to_qualname} =  {
+#$c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{thesis_type_to_qualname} =  {
 #	phd   => "Ph.D.",
 #	engd  => "Eng.D.",
 #	mphil => "M.Phil.",
@@ -46,7 +48,7 @@ $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{metadataPrefix} = "uket
 #
 ###################################################################################
 
-#$c->{plugins}->{"OAI_UKETD_DC"}->{params}->{thesis_type_to_quallevel} =  {
+#$c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{thesis_type_to_quallevel} =  {
 #	phd   => "Doctoral",
 #	engd  => "Doctoral",
 #	mphil => "Masters",
@@ -65,7 +67,7 @@ $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{metadataPrefix} = "uket
 #
 ###################################################################################
 
-#$c->{plugins}->{"OAI_UKETD_DC"}->{params}->{lang_to_3char} = {
+#$c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{lang_to_3char} = {
 #	en => "eng",
 #	fr => "fre",
 #	'English' => 'eng',
@@ -79,7 +81,7 @@ $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{metadataPrefix} = "uket
 #
 ###################################################################################
 
-# $c->{plugins}->{"OAI_UKETD_DC"}->{params}->{contributor_type_thesis_advisor} = "http://www.loc.gov/loc.terms/relators/THS";
+# $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{contributor_type_thesis_advisor} = "http://www.loc.gov/loc.terms/relators/THS";
 
 
 
@@ -113,7 +115,7 @@ $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{metadataPrefix} = "uket
 ###
 ###################################################################################
 
-#$c->{plugins}->{"OAI_UKETD_DC"}->{params}->{creator_and_orcid} = sub {
+#$c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{creator_and_orcid} = sub {
 #	my( $plugin, $eprint ) = @_;
 #
 #	my @returns = ();
@@ -137,8 +139,8 @@ $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{metadataPrefix} = "uket
 ###
 ###################################################################################
 #
-# $c->{plugins}->{"OAI_UKETD_DC"}->{params}->{add_attributes_to_advisor_authoridentifier} = 0;
-# $c->{plugins}->{"OAI_UKETD_DC"}->{params}->{advisor_authoridentifier_attributes} = {
+# $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{add_attributes_to_advisor_authoridentifier} = 0;
+# $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{advisor_authoridentifier_attributes} = {
 #	rel => "advisor",
 # };
 #
