@@ -763,7 +763,7 @@ sub _last_day_of_embargo
 		# else work out leap year stuff
 		# year is div by 4, but not 100, but is by 400
 		# unlikely for ETheses embargo expiry - but I've heard talk of '100 year embargos'...
-		if ( ($y % 4 == 0) && ($y % 100 != 0) && ($y % 400 == 0) ) 
+		if ( ($y % 4 == 0) && ( $y % 100 != 0 || $y % 400 == 0 ) ) 
 		{
 			$end_day++;
 		}
