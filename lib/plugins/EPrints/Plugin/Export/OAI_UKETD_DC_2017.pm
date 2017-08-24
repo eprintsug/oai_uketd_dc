@@ -664,9 +664,12 @@ sub funder_and_project
 	my @sponsors = ();
 	my @grants = ();
 	
-	if( $plugin->repository->can_call( "rioxx2_value_project" ) )
+	# rioxx2_project contains a processed representation of funders and projects.
+	# if it exists, use that in preference to the more feral 'projects' and 'funders' fields.
+	if( $eprint->exists_and_set( "rioxx2_project" ) )
 	{
-		foreach my $proj ( @{ $plugin->repository->call( "rioxx2_value_project", $eprint )} )
+
+		foreach my $proj ( @{ $eprint->get_value( "rioxx_project" ) } )
 		{
 			if( $proj->{project} ){
 				push @grants, [ "grantnumber", $proj->{project}, "uketdterms" ];
