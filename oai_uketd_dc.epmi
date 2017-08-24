@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<epm xmlns='http://eprints.org/ep2/data/2.0' id='http://github.com/eprintsug/oai_uketd_dc'>
+<epm xmlns='http://eprints.org/ep2/data/2.0' id='/id/epm/oai_uketd_dc'>
   <epmid>oai_uketd_dc</epmid>
   <uri>http://github.com/eprintsug/oai_uketd_dc</uri>
   <documents>
@@ -7,43 +7,36 @@
       <files>
         <file>
           <filename>epm/oai_uketd_dc/cfg/cfg.d/z_oai_uketd_dc.pl</filename>
-          <mime_type>text/plain</mime_type>
-          <hash>fa017d5878d7a5440589f33d0c4297d8</hash>
+          <hash>bf70d664d093a48ed68ea7b8a4d479e1</hash>
           <hash_type>MD5</hash_type>
-          <filesize>5294</filesize>
+          <filesize>5919</filesize>
         </file>
         <file>
           <filename>plugins/EPrints/Plugin/Export/OAI_UKETD_DC_2017.pm</filename>
-          <mime_type>text/plain</mime_type>
-          <hash>b959795794a138bf5d97e4a0b15ab1e1</hash>
+          <hash>0911fc6a08c6e4e4acbf8461868b40bf</hash>
           <hash_type>MD5</hash_type>
-          <filesize>26254</filesize>
+          <filesize>26399</filesize>
         </file>
         <file>
           <filename>plugins/EPrints/Plugin/Screen/EPMC/OAI_UKETD_DC_2017.pm</filename>
-          <mime_type>text/plain</mime_type>
           <hash>4d72421821433ec464c3b04b134f402c</hash>
           <hash_type>MD5</hash_type>
           <filesize>1037</filesize>
         </file>
         <file>
           <filename>static/images/epm/icon_oai_uketd_dc.png</filename>
-          <mime_type>image/png</mime_type>
           <hash>4af91cf72ec7dd1ef8beb0d57a87f06e</hash>
           <hash_type>MD5</hash_type>
           <filesize>71703</filesize>
         </file>
       </files>
-      <mime_type>text/plain</mime_type>
-      <format>other</format>
-      <main>plugins/EPrints/Plugin/Screen/EPMC/OAI_UKETD_DC_2017.pm</main>
+      <main>static/images/epm/icon_oai_uketd_dc.png</main>
       <content>install</content>
     </document>
     <document>
       <files>
         <file>
           <filename>static/images/epm/icon_oai_uketd_dc.png</filename>
-          <mime_type>image/png</mime_type>
           <hash>4af91cf72ec7dd1ef8beb0d57a87f06e</hash>
           <hash_type>MD5</hash_type>
           <filesize>71703</filesize>
