@@ -671,11 +671,11 @@ sub funder_and_project
 
 		foreach my $proj ( @{ $eprint->get_value( "rioxx2_project" ) } )
 		{
-			if( $proj->{project} ){
+			if( EPrints::Utils::is_set( $proj->{project} ) ){
 				push @grants, [ "grantnumber", $proj->{project}, "uketdterms" ];
 			}
-			if( $proj->{funder} ){
-				push @sponsors, [ "sponsor", $proj->{sponsor}, "uketdterms" ];
+			if( EPrints::Utils::is_set( $proj->{funder_name} ) ){
+				push @sponsors, [ "sponsor", $proj->{funder_name}, "uketdterms" ];
 			}
 		}
 
