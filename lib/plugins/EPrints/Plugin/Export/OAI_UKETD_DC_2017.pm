@@ -78,12 +78,17 @@ Maps 'short' values to proper ones e.g. 'phd' to 'Ph.D.', or 'dclinpsy' to 'D.Cl
 $DEFAULT{thesis_type_to_qualname} = {
 	phd => "Ph.D.",
 	engd => "Eng.D.",
+	edd => "Ed.D.",
+	dclinpsy => "D.Clin.Psy",
+	mphil => "M.Phil",
 };
 
 
 =item thesis_type_to_quallevel
 
 Maps thesis type to a level 'Masters' or 'Doctoral'.
+In more recent EPrints configuration there are two fields, 'thesis_name' (e.g. phd, end.d) 
+and 'thesis_type' (masters, doctoral). If both fields exist, this is not used.
 
 =cut
 
@@ -94,6 +99,9 @@ Maps thesis type to a level 'Masters' or 'Doctoral'.
 $DEFAULT{thesis_type_to_quallevel} = {
 	phd => "doctoral",
 	engd => "doctoral",
+	edd => "doctoral",
+	dclinpsy => "doctoral",
+	mphil => "masters",
 };
 
 
@@ -476,22 +484,26 @@ sub eprint_to_uketd_dc
 		{
 			push @etddata, [ "isReferencedBy", $eprint->get_value( "official_url" ), "dcterms", "dcterms:URI"];
 		}
-			
+
+		# qualificationname = Ph.D, Ed.D, M.Phil
 		if( $eprint->exists_and_set( "thesis_name" )){
 			push @etddata, [ "qualificationname", $eprint->get_value( "thesis_name" ), "uketdterms"];
 		}
-		# attempt to derive a qualificationname from thesis_type
 		elsif( $eprint->exists_and_set( "thesis_type" ) )
 		{
-			my $name = $plugin->{thesis_type_to_qualname}{ $eprint->get_value( "thesis_type" ) };
-			if( defined $name )
-			{
-				push @etddata, [ "qualificationname", $name, "uketdterms"];
+			# attempt to derive a qualificationname from thesis_type
+			my $name = $eprint->get_value( "thesis_type" );
+			if( defined $plugin->{thesis_type_to_qualname}{ $name } ){
+				$name = $plugin->{thesis_type_to_qualname}{ $name };
 			}
+			push @etddata, [ "qualificationname", $name, "uketdterms"];
 		}
+
+		# qualificationlevel should be e.g. 'masters' or 'doctoral'.
+		# In older EPrints configuration, the 'thesis_type' field (also referenced above) contained
+		# phd, engd, mphil. These values are mapped in thesis_type_to_quallevel.
+		# In newer config, the thesis_type is already the correct value.
 		if( $eprint->exists_and_set( "thesis_type")){
-			# default thesis_type values are a mix of name and level
-			# map 'name' values (eg. phd) to appropriate level (eg. doctoral)
 			my $type = $eprint->get_value( "thesis_type" );
 			if( defined $plugin->{thesis_type_to_quallevel}{ $type } )
 			{
