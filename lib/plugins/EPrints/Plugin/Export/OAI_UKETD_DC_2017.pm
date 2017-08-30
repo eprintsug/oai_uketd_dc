@@ -669,7 +669,7 @@ sub funder_and_project
 	if( $eprint->exists_and_set( "rioxx2_project" ) )
 	{
 
-		foreach my $proj ( @{ $eprint->get_value( "rioxx_project" ) } )
+		foreach my $proj ( @{ $eprint->get_value( "rioxx2_project" ) } )
 		{
 			if( $proj->{project} ){
 				push @grants, [ "grantnumber", $proj->{project}, "uketdterms" ];
