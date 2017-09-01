@@ -101,7 +101,7 @@ $DEFAULT{thesis_type_to_quallevel} = {
 	engd => "doctoral",
 	edd => "doctoral",
 	dclinpsy => "doctoral",
-	mphil => "masters",
+	mphil => "doctoral",
 };
 
 
