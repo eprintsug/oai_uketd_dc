@@ -387,7 +387,7 @@ sub eprint_to_uketd_dc
 	
 	if($eprint->get_value( "type") eq "thesis" || $eprint->get_value( "type" ) eq "Thesis"){
 
-		#function to skip rendering specific documents in the metadata
+		#function to skip rendering specific eprints in the metadata
 		if( $plugin->repository->can_call( "oai_uketd_dc_skip_eprint" ) )
 		{
 			if( $plugin->repository->call( "oai_uketd_dc_skip_eprint", $eprint ) ){
