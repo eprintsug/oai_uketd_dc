@@ -386,6 +386,15 @@ sub eprint_to_uketd_dc
 	# non-thesis items.
 	
 	if($eprint->get_value( "type") eq "thesis" || $eprint->get_value( "type" ) eq "Thesis"){
+
+		#function to skip rendering specific documents in the metadata
+		if( $plugin->repository->can_call( "oai_uketd_dc_skip_eprint" ) )
+		{
+			if( $plugin->repository->call( "oai_uketd_dc_skip_eprint", $eprint ) ){
+				#return (empty) array to generate a 'cannotDisseminateFormat' response
+				return @etddata;
+			};
+		}
 		
 		push @etddata, [ "title", $eprint->get_value( "title" ), "dc" ]; 
 		
@@ -449,6 +458,12 @@ sub eprint_to_uketd_dc
 		my $mimetypes = $session->config( "oai", "mime_types" );
 		foreach( @documents )
 		{
+			#function to skip rendering specific documents in the metadata
+			if( $plugin->repository->can_call( "oai_uketd_dc_skip_document" ) )
+			{
+				next if $plugin->repository->call( "oai_uketd_dc_skip_document", $_ );
+			}
+
 			my $format = $mimetypes->{$_->get_value("format")};
 			$format = $_->get_value("format") unless defined $format;
 			#$format = "application/octet-stream" unless defined $format;

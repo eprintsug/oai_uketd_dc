@@ -145,3 +145,59 @@ $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{metadataPrefix} = "uket
 # };
 #
 ###################################################################################
+
+
+###################################################################################
+###
+### By default all eprints of type='thesis' are represented in the uketd_dc 
+### metadata profile.
+### This function (if defined) allows you to prevent an eprints being included in
+### the uketd_dc response.
+### Return a 1 to skip the eprint.
+### Return a 0 (or just let the function exit) to keep the eprint representation.
+###
+###################################################################################
+#$c->{'oai_uketd_dc_skip_eprint'} = sub
+#{
+#	my( $eprint ) = @_;
+#
+#	# run some tests on the eprint
+#	# return 1 if you want to skip this eprint (e.g. not render information about it in the uketd_dc profile)
+#	# return 0 (or just let the function exit) to redner information in the profile
+#	# e.g. if you have a field indicating top secret research 
+#	if( $eprint->exists_and_set( "top_secret_research" ) && $eprint->get_value( "top_secret_research" ) eq "TRUE" ){
+#		return 1;
+#	}
+#	# or if you have some eprints from elsewhere that shouldn't be included
+#	if( $eprint->exists_and_set( "institution" ) && $eprint->get_value( "institution" ) eq "University of Blah" ){
+#		return 1;
+#	}
+#};
+
+
+###################################################################################
+###
+### By default all documents are rendered in the uketd_dc metadata profile.
+### This function (if defined) allows you to exclude a document from being
+### rendered.
+### Return a 1 to skip the document.
+### Return a 0 (or just let the function exit) to keep the document representation.
+###
+###################################################################################
+#$c->{'oai_uketd_dc_skip_document'} = sub
+#{
+#	my( $document ) = @_;
+#
+#	# run some tests on the document
+#	# return 1 if you want to skip this document (e.g. not render information about it in the UKETD_DC profile)
+#	# return 0 (or just let the function exit) to redner information in the profile
+#	# e.g. if you have an extra security option of 'hidden', 
+#	if( $document->exists_and_set( "security" ) && $document->get_value( "security" ) eq "hidden" ){
+#		return 1;
+#	}
+#	if( $document->exists_and_set( "main" ) && $document->get_value( "main" ) eq "secret.pdf" ){
+#		return 1;
+#	}
+#
+#};
+
