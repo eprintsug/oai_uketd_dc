@@ -597,7 +597,7 @@ sub doi
 
 	if( $eprint->exists_and_set( "doi" ) )
 	{
-		my $doi = _format_doi( $eprint->get_value( "doi" ) );
+		my $doi = $plugin->_format_doi( $eprint->get_value( "doi" ) );
 		if( defined $doi )
 		{
 			return [ "identifier", $doi, "dc", "dcterms:DOI" ];
@@ -605,7 +605,7 @@ sub doi
 	}
 
 	if( $eprint->exists_and_set( "id_number" ) ){
-		my $doi = _format_doi( $eprint->get_value( "id_number" ) );
+		my $doi = $plugin->_format_doi( $eprint->get_value( "id_number" ) );
 		if( defined $doi )
 		{
 			return [ "identifier", $doi, "dc", "dcterms:DOI" ];
@@ -631,7 +631,7 @@ sub creator_and_orcid
 			push @dc_creators, [ "creator", EPrints::Utils::make_name_string( $creator->{name} ), "dc" ];
 			if( EPrints::Utils::is_set( $creator->{orcid} ) ) 
 			{
-				push @orcids, [ "authoridentifier", _format_orcid( $creator->{orcid} ), "uketdterms", { "xsi:type" => "uketdterms:ORCID" }  ];
+				push @orcids, [ "authoridentifier", $plugin->_format_orcid( $creator->{orcid} ), "uketdterms", { "xsi:type" => "uketdterms:ORCID" }  ];
 			}
 		}
 	}
@@ -660,7 +660,7 @@ sub advisor_and_orcid
 			push @advisors, [ "advisor", EPrints::Utils::make_name_string( $contrib->{name} ), "uketdterms" ];
 			if( EPrints::Utils::is_set( $contrib->{orcid} ) )
 			{
-				push @orcids, [ "authoridentifier", _format_orcid( $contrib->{orcid} ), "uketdterms", $plugin->_attributes_for_advisor_authoridentifier  ];
+				push @orcids, [ "authoridentifier", $plugin->_format_orcid( $contrib->{orcid} ), "uketdterms", $plugin->_attributes_for_advisor_authoridentifier  ];
 			}
 		}
 	}
@@ -734,7 +734,7 @@ sub funder_and_project
 
 sub _format_orcid
 {
-	my( $orcid ) = @_;
+	my( $plugin, $orcid ) = @_;
 
 	# guidelines want 16-characters, no hyphens or URLs.
 	# This should deal with URLs or namespaced values.
@@ -745,7 +745,7 @@ sub _format_orcid
 
 sub _format_doi
 {
-	my( $doi ) = @_;
+	my( $plugin, $doi ) = @_;
 
 	# advice received is that just DOI is preferred to a URL
 	# logic taken from EPrints::Extras::render_possible_doi

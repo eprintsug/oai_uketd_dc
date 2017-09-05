@@ -114,8 +114,8 @@ $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{metadataPrefix} = "uket
 ###
 ### There are two 'internal' methods that format DOIs, ORCIDs in the way EThOS
 ### would like to receive them:
-### my $orcid = _format_orcid( $creator->{orcid} );
-### my $doi = _format_doi( $eprint->value( "doi" ) );
+### my $orcid = $plugin->_format_orcid( $creator->{orcid} );
+### my $doi = $plugin->_format_doi( $eprint->value( "doi" ) );
 ### If the value passed to the _format_orcid method doesn't look like an orcid, it 
 ### is returned as-is whereas if the value passed to _format_doi doesn't match the 
 ### expected format, nothing is returned.
