@@ -1,3 +1,9 @@
+=head1 NAME
+
+EPrints::Plugin::Screen::EPMC::OAI_UKETD_DC_2017;
+
+=cut
+
 package EPrints::Plugin::Screen::EPMC::OAI_UKETD_DC_2017;
 
 @ISA = ( 'EPrints::Plugin::Screen::EPMC' );
@@ -49,3 +55,5 @@ sub action_configure
 }
 
 1;
+
+# RIP TMB

@@ -38,20 +38,27 @@ $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{metadataPrefix} = "uket
 #$c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{thesis_type_to_qualname} =  {
 #	phd   => "Ph.D.",
 #	engd  => "Eng.D.",
+#	edd   => "Ed.D",
+#	dclinpsy => "D.Clin.Psy",
 #	mphil => "M.Phil.",
 #};
 
 ###################################################################################
 # 
 # thesis_type_to_quallevel
-# Map the thesis types to e.g. 'Doctoral' or 'Masters'
+# Map the thesis types to e.g. 'doctoral' or 'masters'
 #
 ###################################################################################
 
 #$c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{thesis_type_to_quallevel} =  {
-#	phd   => "Doctoral",
-#	engd  => "Doctoral",
-#	mphil => "Masters",
+#	phd   => "doctoral",
+#	engd  => "doctoral",
+#	mphil => "doctoral",
+#	edd   => "doctoral",
+#	dclinpsy => "doctoral",
+#	mphil => "doctoral",
+#	### example for 'masters' level ###
+#	meng => "masters",
 #};
 
 
