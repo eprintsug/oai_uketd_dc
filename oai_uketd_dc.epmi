@@ -7,15 +7,15 @@
       <files>
         <file>
           <filename>epm/oai_uketd_dc/cfg/cfg.d/z_oai_uketd_dc.pl</filename>
-          <hash>bf70d664d093a48ed68ea7b8a4d479e1</hash>
+          <hash>9b86860360e65ed59871fd9c869f45eb</hash>
           <hash_type>MD5</hash_type>
-          <filesize>5919</filesize>
+          <filesize>8170</filesize>
         </file>
         <file>
           <filename>plugins/EPrints/Plugin/Export/OAI_UKETD_DC_2017.pm</filename>
-          <hash>1c18c25629e691b84f50889edae244b8</hash>
+          <hash>a3017551bb59c70fc46c7ff4c8e068fc</hash>
           <hash_type>MD5</hash_type>
-          <filesize>26399</filesize>
+          <filesize>27567</filesize>
         </file>
         <file>
           <filename>plugins/EPrints/Plugin/Screen/EPMC/OAI_UKETD_DC_2017.pm</filename>
@@ -47,7 +47,7 @@
       <content>coverimage</content>
     </document>
   </documents>
-  <version>1.0.0</version>
+  <version>1.0.2</version>
   <controller>EPMC::OAI_UKETD_DC_2017</controller>
   <creators>
     <item>
@@ -55,10 +55,17 @@
         <family>Salter</family>
         <given>John</given>
       </name>
-      <id>J.Salter@leeds.ac.uk</id>
+      <id>https://orcid.org/0000-0002-8611-8266</id>
+    </item>
+    <item>
+      <name>
+        <family>Stiles</family>
+        <given>Alan</given>
+      </name>
+      <id>https://orcid.org/0000-0003-3343-1088</id>
     </item>
   </creators>
-  <datestamp>2017-08-22 12:31:12</datestamp>
+  <datestamp>2017-08-30 13:03:26</datestamp>
   <title>UKETD update 2017</title>
   <description>Updates the OAI-PMH metadata format &apos;UKETD_DC&apos; that the British Library EThOS service uses to harvest thesis information.</description>
   <requirements>No additional modules.</requirements>
