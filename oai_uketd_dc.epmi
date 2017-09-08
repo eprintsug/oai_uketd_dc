@@ -13,9 +13,9 @@
         </file>
         <file>
           <filename>plugins/EPrints/Plugin/Export/OAI_UKETD_DC_2017.pm</filename>
-          <hash>0cd4c4dc32103b2c1c7456310cbe883b</hash>
+          <hash>bf6e9f06fd4e1c490d574acdc1c5755c</hash>
           <hash_type>MD5</hash_type>
-          <filesize>27630</filesize>
+          <filesize>27681</filesize>
         </file>
         <file>
           <filename>plugins/EPrints/Plugin/Screen/EPMC/OAI_UKETD_DC_2017.pm</filename>

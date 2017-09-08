@@ -421,7 +421,9 @@ sub eprint_to_uketd_dc
 			}
 		}
 		# Steve Carr : we're using qdc, namespace dcterms, version of description - 'abstract'
-		push @etddata, [ "abstract", $eprint->get_value( "abstract" ), "dcterms" ]; 
+		if( $eprint->exists_and_set( "abstract" ) ){
+			push @etddata, [ "abstract", $eprint->get_value( "abstract" ), "dcterms" ];
+		}
 		
 		# Steve Carr : theses aren't technically 'published' so we can't assume a publisher here as in original code
 		if( $eprint->exists_and_set( "publisher" ) ){
