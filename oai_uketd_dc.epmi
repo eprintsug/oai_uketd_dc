@@ -13,9 +13,9 @@
         </file>
         <file>
           <filename>plugins/EPrints/Plugin/Export/OAI_UKETD_DC_2017.pm</filename>
-          <hash>bf6e9f06fd4e1c490d574acdc1c5755c</hash>
+          <hash>c1a85437c4b7e7d7ba01d79fe7421767</hash>
           <hash_type>MD5</hash_type>
-          <filesize>27681</filesize>
+          <filesize>27941</filesize>
         </file>
         <file>
           <filename>plugins/EPrints/Plugin/Screen/EPMC/OAI_UKETD_DC_2017.pm</filename>
@@ -47,7 +47,7 @@
       <content>coverimage</content>
     </document>
   </documents>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <controller>EPMC::OAI_UKETD_DC_2017</controller>
   <creators>
     <item>
@@ -69,6 +69,6 @@
   <title>UKETD update 2017</title>
   <description>Updates the OAI-PMH metadata format &apos;UKETD_DC&apos; that the British Library EThOS service uses to harvest thesis information.</description>
   <requirements>No additional modules.</requirements>
-  <home_page>http://github.com/eprintsug/oai_uketd_dc</home_page>
+  <home_page>https://eprintsug.github.io/oai_uketd_dc/</home_page>
   <icon>images/epm/icon_oai_uketd_dc.png</icon>
 </epm>
