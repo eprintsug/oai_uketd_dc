@@ -76,11 +76,16 @@ Maps 'short' values to proper ones e.g. 'phd' to 'Ph.D.', or 'dclinpsy' to 'D.Cl
 # can be overridden at archive level eg.
 # $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{thesis_type_to_qualname} = { .. };
 $DEFAULT{thesis_type_to_qualname} = {
-	phd => "Ph.D.",
-	engd => "Eng.D.",
-	edd => "Ed.D.",
+	phd      => "Ph.D.",
+	engd     => "Eng.D.",
+	edd      => "Ed.D.",
 	dclinpsy => "D.Clin.Psy",
-	mphil => "M.Phil",
+	md       => "M.D.",
+	mphil    => "M.Phil",
+	mres     => "M.Res",
+	ma       => "M.A",
+	msc      => "M.Sc",
+	llm      => "L.L.M",
 };
 
 
@@ -97,11 +102,16 @@ and 'thesis_type' (masters, doctoral). If both fields exist, this is not used.
 # can be overridden at archive level eg.
 # $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{thesis_type_to_quallevel} = { .. };
 $DEFAULT{thesis_type_to_quallevel} = {
-	phd => "doctoral",
-	engd => "doctoral",
-	edd => "doctoral",
+	phd      => "doctoral",
+	engd     => "doctoral",
+	edd      => "doctoral",
 	dclinpsy => "doctoral",
-	mphil => "doctoral",
+	md       => "doctoral",
+	mphil    => "masters",
+	mres     => 'masters',
+	ma       => 'masters',
+	msc      => 'masters',
+	llm      => 'masters',
 };
 
 
