@@ -30,3 +30,7 @@ The plugin works by:
 * [EThOS application profile - PDF](http://ethostoolkit.cranfield.ac.uk/tiki-download_file.php?fileId=50)
 * [Other EThOS downloads](http://ethostoolkit.cranfield.ac.uk/tiki-list_file_gallery.php?page=Downloads&galleryId=8)
 
+## Dedication
+This plugin is dedicated to Tim Miles-Board.
+In your code, you live on.
+
