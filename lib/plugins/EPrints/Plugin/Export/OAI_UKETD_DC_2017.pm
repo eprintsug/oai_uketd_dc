@@ -79,13 +79,13 @@ $DEFAULT{thesis_type_to_qualname} = {
 	phd      => "Ph.D.",
 	engd     => "Eng.D.",
 	edd      => "Ed.D.",
-	dclinpsy => "D.Clin.Psy",
+	dclinpsy => "D.Clin.Psy.",
 	md       => "M.D.",
-	mphil    => "M.Phil",
-	mres     => "M.Res",
-	ma       => "M.A",
-	msc      => "M.Sc",
-	llm      => "L.L.M",
+	mphil    => "M.Phil.",
+	mres     => "M.Res.",
+	ma       => "M.A.",
+	msc      => "M.Sc.",
+	llm      => "L.L.M.",
 };
 
 

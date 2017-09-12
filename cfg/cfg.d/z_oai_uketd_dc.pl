@@ -36,11 +36,16 @@ $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{metadataPrefix} = "uket
 ###################################################################################
 
 #$c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{thesis_type_to_qualname} =  {
-#	phd   => "Ph.D.",
-#	engd  => "Eng.D.",
-#	edd   => "Ed.D",
-#	dclinpsy => "D.Clin.Psy",
-#	mphil => "M.Phil.",
+#	phd      => "Ph.D.",
+#	engd     => "Eng.D.",
+#	edd      => "Ed.D.",
+#	dclinpsy => "D.Clin.Psy.",
+#	md       => "M.D.",
+#	mphil    => "M.Phil.",
+#	mres     => "M.Res.",
+#	ma       => "M.A.",
+#	msc      => "M.Sc.",
+#	llm      => "L.L.M.",
 #};
 
 ###################################################################################
@@ -51,14 +56,16 @@ $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{metadataPrefix} = "uket
 ###################################################################################
 
 #$c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{thesis_type_to_quallevel} =  {
-#	phd   => "doctoral",
-#	engd  => "doctoral",
-#	mphil => "doctoral",
-#	edd   => "doctoral",
+#	phd      => "doctoral",
+#	engd     => "doctoral",
+#	edd      => "doctoral",
 #	dclinpsy => "doctoral",
-#	mphil => "doctoral",
-#	### example for 'masters' level ###
-#	meng => "masters",
+#	md       => "doctoral",
+#	mphil    => "masters",
+#	mres     => 'masters',
+#	ma       => 'masters',
+#	msc      => 'masters',
+#	llm      => 'masters',
 #};
 
 

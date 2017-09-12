@@ -7,15 +7,15 @@
       <files>
         <file>
           <filename>epm/oai_uketd_dc/cfg/cfg.d/z_oai_uketd_dc.pl</filename>
-          <hash>9e16c009e9d47bae94ecf0d597394e17</hash>
+          <hash>d60147e1e65a45c4119e69910c920461</hash>
           <hash_type>MD5</hash_type>
-          <filesize>8367</filesize>
+          <filesize>8551</filesize>
         </file>
         <file>
           <filename>plugins/EPrints/Plugin/Export/OAI_UKETD_DC_2017.pm</filename>
-          <hash>c1a85437c4b7e7d7ba01d79fe7421767</hash>
+          <hash>97ebdec2a51937cb056aa8cbf68ffb42</hash>
           <hash_type>MD5</hash_type>
-          <filesize>27941</filesize>
+          <filesize>27947</filesize>
         </file>
         <file>
           <filename>plugins/EPrints/Plugin/Screen/EPMC/OAI_UKETD_DC_2017.pm</filename>
@@ -47,7 +47,7 @@
       <content>coverimage</content>
     </document>
   </documents>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <controller>EPMC::OAI_UKETD_DC_2017</controller>
   <creators>
     <item>
