@@ -7,7 +7,7 @@ __If any customisations have been made to your UKETD_DC output, please understan
 
 As a minimum, you should check what thesis types your repository is configured to support (e.g. PhD, EngD, MPhil), and make sure these match (i) the range of quialifications your insitution actually awards (and/or awarded), and (ii) make sure they are mapped in the configuration file correctly (see comments in the config file for more details).
 
-More recent versions of EPrints have both a [`thesis_type` and a `thesis_name` field](https://github.com/eprints/eprints/blob/3.3/lib/defaultcfg/cfg.d/eprint_fields.pl#L267-L290). These values will be used in preference to mapping values e.g. from 'phd' to 'doctoral'. If you are unsure whether you have both field, create the maps anyway!
+More recent versions of EPrints have both a [`thesis_type` and a `thesis_name` field](https://github.com/eprints/eprints/blob/3.3/lib/defaultcfg/cfg.d/eprint_fields.pl#L267-L290). These values will be used in preference to mapping values e.g. from 'phd' to 'doctoral'. If you are unsure whether you have both fields, create the maps anyway!
 
 
 ```
@@ -39,13 +39,13 @@ $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{thesis_type_to_qualleve
 
 ```
 
-NB If the value you are mapping includes non-alphanumerical characters, you may need to quote them e.g. `'abc-def' => "ABC. DEF",`.
+NB If the value you are mapping includes non-alphanumerical characters, you may need to quote them e.g. `'abc-def' => "ABC. DEF.",`.
 
 
 ## Future versions of EPrints
 The default export plugin for the UKETD_DC has been updated in the 3.3 branch of EPrints. This means that if you are running EPrints version 3.3.16 or later, this plugin is probably not needed.
 
-At the time of writing, how this export format will be delivered in EPrints 3.4 is unknown. If you need help with this, please try the EPrints Tech list, or submit an Issue on GitHub.
+At the time of writing, how this export format will be delivered in EPrints 3.4 is unknown. If you need help with this, please try the EPrints Tech list, or submit an [Issue on GitHub](https://github.com/eprintsug/oai_uketd_dc/issues).
 
 ## Technical details
 
