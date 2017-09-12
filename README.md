@@ -3,6 +3,12 @@ The [UKETD_DC specification](http://ethostoolkit.cranfield.ac.uk/tiki-index.php?
 
 Many of the fields that are now present in the UKETD_DC profile may have been added to an EPrints repository as a local modification. The new plugin has a default mapping for a lot of the data, but also allows for some information to be mapped in a customised way via a configuration file.
 
+New mappings include:
+* ORCIDs (by default maps from an `orcid` subfield of creators)
+* DOIs (looks for data in a `doi` or `id_number` field)
+* Funders / Grants (re-uses the RIOXX fields if that extension is installed. If not, looks in `funder` and `project` fields)
+* Departments (uses the `divisions` subject field)
+
 __If any customisations have been made to your UKETD_DC output, please understand (at a technical level) this plugin before installing it.__
 
 As a minimum, you should check what thesis types your repository is configured to support (e.g. PhD, EngD, MPhil), and make sure these match (i) the range of quialifications your insitution actually awards (and/or awarded), and (ii) make sure they are mapped in the configuration file correctly (see comments in the config file for more details).
@@ -41,6 +47,7 @@ $c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{thesis_type_to_qualleve
 
 NB If the value you are mapping includes non-alphanumerical characters, you may need to quote them e.g. `'abc-def' => "ABC. DEF.",`.
 
+There is also the ability to 'skip' a document (so no data from it appears in the UKETD_DC profile), or to skip a whole EPrint (if you have a thesis that shouldn't be harvested). Please see the comments in the config file for more details.
 
 ## Future versions of EPrints
 The default export plugin for the UKETD_DC has been updated in the 3.3 branch of EPrints. This means that if you are running EPrints version 3.3.16 or later, this plugin is probably not needed.
@@ -52,7 +59,7 @@ At the time of writing, how this export format will be delivered in EPrints 3.4 
 The plugin works by:
 * stopping the UKETD_DC export plugin supplied with EPrints from responding to OAI-PMH calls specifying `metadataProfile=uketd_dc`
 * adding a new export plugin that is configured to respond to the `uketd_dc` profile
-* by following the instructions at the top of the config file, you can make the existing export plugin respond to the `uketd_dc` profile requests, and configure the new export plugin to respons to another metadata profile e.g. `uketd_dc_2017`. This may be useful for testing.
+* by following the instructions at the top of the config file, you can make the existing export plugin respond to the `uketd_dc` profile requests, and configure the new export plugin to respond to another metadata profile e.g. `uketd_dc_2017`. This may be useful for testing.
 
 ### Main files in this plugin:
 
