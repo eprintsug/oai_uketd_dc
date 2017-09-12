@@ -7,6 +7,41 @@ __If any customisations have been made to your UKETD_DC output, please understan
 
 As a minimum, you should check what thesis types your repository is configured to support (e.g. PhD, EngD, MPhil), and make sure these match (i) the range of quialifications your insitution actually awards (and/or awarded), and (ii) make sure they are mapped in the configuration file correctly (see comments in the config file for more details).
 
+More recent versions of EPrints have both a [`thesis_type` and a `thesis_name` field](https://github.com/eprints/eprints/blob/3.3/lib/defaultcfg/cfg.d/eprint_fields.pl#L267-L290). These values will be used in preference to mapping values e.g. from 'phd' to 'doctoral'. If you are unsure whether you have both field, create the maps anyway!
+
+
+```
+$c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{thesis_type_to_qualname} =  {
+    phd      => "Ph.D.",
+    engd     => "Eng.D.",
+    edd      => "Ed.D.",
+    dclinpsy => "D.Clin.Psy.",
+    md       => "M.D.",
+    mphil    => "M.Phil.",
+    mres     => "M.Res.",
+    ma       => "M.A.",
+    msc      => "M.Sc.",
+    llm      => "L.L.M.",
+};
+
+$c->{plugins}->{"Export::OAI_UKETD_DC_2017"}->{params}->{thesis_type_to_quallevel} =  {
+    phd      => "doctoral",
+    engd     => "doctoral",
+    edd      => "doctoral",
+    dclinpsy => "doctoral",
+    md       => "doctoral",
+    mphil    => "masters",
+    mres     => 'masters',
+    ma       => 'masters',
+    msc      => 'masters',
+    llm      => 'masters',
+};
+
+```
+
+NB If the value you are mapping includes non-alphanumerical characters, you may need to quote them e.g. `'abc-def' => "ABC. DEF",`.
+
+
 ## Future versions of EPrints
 The default export plugin for the UKETD_DC has been updated in the 3.3 branch of EPrints. This means that if you are running EPrints version 3.3.16 or later, this plugin is probably not needed.
 
@@ -30,7 +65,13 @@ The plugin works by:
 * [EThOS application profile - PDF](http://ethostoolkit.cranfield.ac.uk/tiki-download_file.php?fileId=50)
 * [Other EThOS downloads](http://ethostoolkit.cranfield.ac.uk/tiki-list_file_gallery.php?page=Downloads&galleryId=8)
 
+## Acknowledgement
+* This work was funded by the British Library. Many thanks to Heather Rosie and Sara Gould for their input to the process.
+* The work was undertaken as part of the development of White Rose Libraries (Universities of Leeds, Sheffield and York).
+* Thanks also to Alan Stiles and the Open University for testing the new plugin.
+
 ## Dedication
 This plugin is dedicated to Tim Miles-Board.
+
 In your code, you live on.
 
