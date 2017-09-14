@@ -11,7 +11,7 @@ New mappings include:
 
 __If any customisations have been made to your UKETD_DC output, please understand (at a technical level) this plugin before installing it.__
 
-As a minimum, you should check what thesis types your repository is configured to support (e.g. PhD, EngD, MPhil), and make sure these match (i) the range of quialifications your insitution actually awards (and/or awarded), and (ii) make sure they are mapped in the configuration file correctly (see comments in the config file for more details).
+As a minimum, you should check what thesis types your repository is configured to support (e.g. PhD, EngD, MPhil), and make sure these match (i) the range of qualifications your insitution actually awards (and/or awarded), and (ii) make sure they are mapped in the configuration file correctly (see comments in the config file for more details).
 
 More recent versions of EPrints have both a [`thesis_type` and a `thesis_name` field](https://github.com/eprints/eprints/blob/3.3/lib/defaultcfg/cfg.d/eprint_fields.pl#L267-L290). These values will be used in preference to mapping values e.g. from 'phd' to 'doctoral'. If you are unsure whether you have both fields, create the maps anyway!
 
